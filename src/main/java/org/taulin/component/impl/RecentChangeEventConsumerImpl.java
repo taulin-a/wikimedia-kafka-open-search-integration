@@ -9,6 +9,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.LongDeserializer;
+import org.taulin.component.EventOpenSearchClient;
 import org.taulin.component.RecentChangeEventConsumer;
 import org.taulin.model.RecentChangeEvent;
 
@@ -22,6 +23,7 @@ public class RecentChangeEventConsumerImpl implements RecentChangeEventConsumer 
     private final KafkaConsumer<Long, LinkedHashMap<String, Object>> recentChangeEventConsumer;
     private final Long pollTimeout;
     private final ObjectMapper objectMapper;
+    private final EventOpenSearchClient eventOpenSearchClient;
 
     @Inject
     public RecentChangeEventConsumerImpl(@Named("bootstrap.server") String bootstrapServer,
@@ -29,7 +31,8 @@ public class RecentChangeEventConsumerImpl implements RecentChangeEventConsumer 
                                          @Named("group.id") String groupId,
                                          @Named("auto.offset.reset") String autoOffsetReset,
                                          @Named("poll.timeout") Long pollTimeout,
-                                         ObjectMapper objectMapper) {
+                                         ObjectMapper objectMapper,
+                                         EventOpenSearchClient eventOpenSearchClient) {
         final Properties properties = new Properties();
         properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId);
@@ -42,6 +45,7 @@ public class RecentChangeEventConsumerImpl implements RecentChangeEventConsumer 
 
         this.pollTimeout = pollTimeout;
         this.objectMapper = objectMapper;
+        this.eventOpenSearchClient = eventOpenSearchClient;
     }
 
     @Override
@@ -52,7 +56,7 @@ public class RecentChangeEventConsumerImpl implements RecentChangeEventConsumer 
         for (var record : records) {
             final RecentChangeEvent recentChangeEvent = linkedHashMapToRecentChangeEvent(record.value());
             log.info("Recent change event consumed: {}", recentChangeEvent);
-            // TODO: Send to opensearch
+            eventOpenSearchClient.sendEvent(recentChangeEvent);
         }
     }
 
