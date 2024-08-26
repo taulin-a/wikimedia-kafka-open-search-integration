@@ -1,5 +1,5 @@
 package org.taulin.component;
 
-public interface WikimediaKafkaConsumerRunner {
+public interface WikimediaKafkaConsumerRunner extends AutoCloseable {
     void run();
 }
