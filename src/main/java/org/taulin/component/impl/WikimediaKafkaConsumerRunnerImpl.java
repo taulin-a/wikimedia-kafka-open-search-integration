@@ -1,5 +1,6 @@
 package org.taulin.component.impl;
 
+import com.google.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.taulin.component.RecentChangeEventConsumer;
 import org.taulin.component.WikimediaKafkaConsumerRunner;
@@ -13,6 +14,7 @@ public class WikimediaKafkaConsumerRunnerImpl implements WikimediaKafkaConsumerR
     private final ScheduledExecutorService executorService;
     private final RecentChangeEventConsumer recentChangeEventConsumer;
 
+    @Inject
     public WikimediaKafkaConsumerRunnerImpl(RecentChangeEventConsumer recentChangeEventConsumer) {
         this.executorService = Executors.newSingleThreadScheduledExecutor();
         this.recentChangeEventConsumer = recentChangeEventConsumer;
