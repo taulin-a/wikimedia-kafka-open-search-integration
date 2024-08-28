@@ -16,11 +16,6 @@ import org.opensearch.client.transport.rest_client.RestClientTransport;
 import org.taulin.component.EventOpenSearchClient;
 import org.taulin.model.RecentChangeEvent;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-import java.security.SecureRandom;
-import java.security.cert.X509Certificate;
 import java.util.Objects;
 
 @Slf4j
