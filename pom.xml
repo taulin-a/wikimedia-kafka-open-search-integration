@@ -13,7 +13,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <main.class>org.taulin.WikimediaStreamProcessorApp</main.class>
+        <main.class>org.taulin.WikimediaKafkaOpenSearchIntegrationApp</main.class>
 
         <jackson.version>2.17.2</jackson.version>
         <kafka.sdk.version>3.8.0</kafka.sdk.version>
