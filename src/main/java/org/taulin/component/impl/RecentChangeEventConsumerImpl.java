@@ -56,8 +56,10 @@ public class RecentChangeEventConsumerImpl implements RecentChangeEventConsumer 
         for (var record : records) {
             final RecentChangeEvent recentChangeEvent = linkedHashMapToRecentChangeEvent(record.value());
             log.info("Recent change event consumed: {}", recentChangeEvent);
-            eventOpenSearchClient.sendEvent(recentChangeEvent);
+            eventOpenSearchClient.addEventToBulk(recentChangeEvent);
         }
+
+        eventOpenSearchClient.sendBulk();
     }
 
     private RecentChangeEvent linkedHashMapToRecentChangeEvent(LinkedHashMap<String, Object> linkedHashMap) {

@@ -3,5 +3,7 @@ package org.taulin.component;
 import org.taulin.model.RecentChangeEvent;
 
 public interface EventOpenSearchClient {
-    void sendEvent(RecentChangeEvent recentChangeEvent);
+    void addEventToBulk(RecentChangeEvent recentChangeEvent);
+
+    void sendBulk();
 }
