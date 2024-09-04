@@ -17,12 +17,13 @@
 
         <jackson.version>2.17.2</jackson.version>
         <kafka.sdk.version>3.8.0</kafka.sdk.version>
-        <json.serializer.version>7.6.2</json.serializer.version>
+        <avro.version>1.11.1</avro.version>
         <open.search.version>2.16.0</open.search.version>
         <open.search.rest.version>2.6.0</open.search.rest.version>
         <slf4j.version>2.0.16</slf4j.version>
         <guice.version>7.0.0</guice.version>
         <lombok.version>1.18.34</lombok.version>
+        <mapstruct.version>1.6.0</mapstruct.version>
     </properties>
 
     <repositories>
@@ -56,10 +57,12 @@
             <artifactId>kafka-streams</artifactId>
             <version>${kafka.sdk.version}</version>
         </dependency>
+
+        <!-- Avro -->
         <dependency>
-            <groupId>io.confluent</groupId>
-            <artifactId>kafka-json-schema-serializer</artifactId>
-            <version>${json.serializer.version}</version>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+            <version>${avro.version}</version>
         </dependency>
 
         <!-- Opensearch -->
@@ -100,6 +103,13 @@
             <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- Mapstruct -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -127,6 +137,49 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro-maven-plugin</artifactId>
+                <version>${avro.version}</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>schema</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirectory>${project.basedir}/src/main/avro</sourceDirectory>
+                            <outputDirectory>${project.build.directory}/generated-sources/avro</outputDirectory>
+                            <imports>
+                                <import>${project.basedir}/src/main/avro/MetaModel.avsc</import>
+                                <import>${project.basedir}/src/main/avro/RevisionModel.avsc</import>
+                                <import>${project.basedir}/src/main/avro/RecentChangeEventModel.avsc</import>
+                            </imports>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>21</source>
+                    <target>21</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
             </plugin>
         </plugins>
     </build>

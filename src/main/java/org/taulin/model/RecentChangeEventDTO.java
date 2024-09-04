@@ -1,31 +1,30 @@
 package org.taulin.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 
 @Builder
-public record RecentChangeEvent(
-        @JsonProperty("$schema") String schema,
-        @JsonProperty("meta") Meta meta,
-        @JsonProperty("id") Long id,
-        @JsonProperty("type") String type,
-        @JsonProperty("namespace") Integer namespace,
-        @JsonProperty("title") String title,
-        @JsonProperty("title_url") String titleUrl,
-        @JsonProperty("comment") String comment,
-        @JsonProperty("timestamp") Long timestamp,
-        @JsonProperty("user") String user,
-        @JsonProperty("bot") Boolean bot,
-        @JsonProperty("notify_url") String notifyUrl,
-        @JsonProperty("server_url") String serverUrl,
-        @JsonProperty("server_name") String serverName,
-        @JsonProperty("server_script_path") String serverScriptPath,
-        @JsonProperty("wiki") String wiki,
-        @JsonProperty("parsedcomment") String parsedComment,
-        @JsonProperty("minor") Boolean minor,
-        @JsonProperty("patrolled") Boolean patrolled,
-        @JsonProperty("length") Revision length,
-        @JsonProperty("revision") Revision revision) {
+public record RecentChangeEventDTO(
+        String schema,
+        MetaDTO meta,
+        Long id,
+        String type,
+        Integer namespace,
+        String title,
+        String titleUrl,
+        String comment,
+        Long timestamp,
+        String user,
+        Boolean bot,
+        String notifyUrl,
+        String serverUrl,
+        String serverName,
+        String serverScriptPath,
+        String wiki,
+        String parsedComment,
+        Boolean minor,
+        Boolean patrolled,
+        RevisionDTO length,
+        RevisionDTO revision) {
     @Override
     public String toString() {
         return "RecentChangeEvent{" +

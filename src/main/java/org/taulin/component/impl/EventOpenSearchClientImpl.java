@@ -16,7 +16,9 @@ import org.opensearch.client.opensearch.core.bulk.BulkOperation;
 import org.opensearch.client.opensearch.core.bulk.IndexOperation;
 import org.opensearch.client.transport.rest_client.RestClientTransport;
 import org.taulin.component.EventOpenSearchClient;
+import org.taulin.mapper.RecentChangeEventMapper;
 import org.taulin.model.RecentChangeEvent;
+import org.taulin.model.RecentChangeEventDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,15 +28,19 @@ import java.util.Objects;
 public class EventOpenSearchClientImpl implements EventOpenSearchClient {
     private static final String DEFAULT_INDEX = "wikimedia-event";
 
+    private final RecentChangeEventMapper recentChangeEventMapper;
     private final OpenSearchClient client;
     private final List<BulkOperation> operationList = new ArrayList<>();
 
     @Inject
-    public EventOpenSearchClientImpl(@Named("opensearch.protocol") String protocol,
+    public EventOpenSearchClientImpl(RecentChangeEventMapper recentChangeEventMapper,
+                                     @Named("opensearch.protocol") String protocol,
                                      @Named("opensearch.host") String host,
                                      @Named("opensearch.port") Integer port,
                                      @Named("opensearch.user") String user,
                                      @Named("opensearch.pass") String password) {
+        this.recentChangeEventMapper = recentChangeEventMapper;
+
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY,
                 new UsernamePasswordCredentials(user, password));
@@ -51,12 +57,12 @@ public class EventOpenSearchClientImpl implements EventOpenSearchClient {
 
     @Override
     public void addEventToBulk(RecentChangeEvent recentChangeEvent) {
-        IndexOperation<RecentChangeEvent> indexOperation = new IndexOperation.Builder<RecentChangeEvent>()
+        IndexOperation<RecentChangeEventDTO> indexOperation = new IndexOperation.Builder<RecentChangeEventDTO>()
                 .index(DEFAULT_INDEX)
-                .id(Objects.nonNull(recentChangeEvent.id())
-                        ? Long.toString(recentChangeEvent.id())
+                .id(Objects.nonNull(recentChangeEvent.getId())
+                        ? Long.toString(recentChangeEvent.getId())
                         : null)
-                .document(recentChangeEvent)
+                .document(recentChangeEventMapper.recentChangeEventToRecentChangeEventDto(recentChangeEvent))
                 .build();
 
         operationList.add(new BulkOperation.Builder()
