@@ -2,6 +2,7 @@ package org.taulin.component.impl;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -35,6 +36,7 @@ public class RecentChangeEventConsumerImpl implements RecentChangeEventConsumer 
         properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, autoOffsetReset);
         properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class.getName());
         properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, RecentChangeEventAvroDeserializer.class.getName());
+        properties.setProperty(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, "true");
 
         this.recentChangeEventConsumer = new KafkaConsumer<>(properties);
         recentChangeEventConsumer.subscribe(Collections.singletonList(topicName));

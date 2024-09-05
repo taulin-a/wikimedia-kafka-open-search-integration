@@ -17,7 +17,8 @@
 
         <jackson.version>2.17.2</jackson.version>
         <kafka.sdk.version>3.8.0</kafka.sdk.version>
-        <avro.version>1.11.1</avro.version>
+        <kafka.avro.serializer.version>7.7.0</kafka.avro.serializer.version>
+        <avro.version>1.12.0</avro.version>
         <open.search.version>2.16.0</open.search.version>
         <open.search.rest.version>2.6.0</open.search.rest.version>
         <slf4j.version>2.0.16</slf4j.version>
@@ -56,6 +57,11 @@
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-streams</artifactId>
             <version>${kafka.sdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-avro-serializer</artifactId>
+            <version>${kafka.avro.serializer.version}</version>
         </dependency>
 
         <!-- Avro -->

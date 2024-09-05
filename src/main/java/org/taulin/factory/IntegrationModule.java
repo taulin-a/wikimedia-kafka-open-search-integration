@@ -10,6 +10,8 @@ import org.taulin.component.impl.EventOpenSearchClientImpl;
 import org.taulin.component.impl.RecentChangeEventConsumerImpl;
 import org.taulin.component.impl.WikimediaKafkaConsumerRunnerImpl;
 import org.taulin.exception.ConfigurationException;
+import org.taulin.mapper.RecentChangeEventMapper;
+import org.taulin.mapper.RecentChangeEventMapperImpl;
 import org.taulin.util.ResourceLoaderUtil;
 
 import java.io.FileReader;
@@ -21,6 +23,7 @@ public class IntegrationModule extends AbstractModule {
     @Override
     protected void configure() {
         Names.bindProperties(binder(), loadApplicationProperties());
+        bind(RecentChangeEventMapper.class).to(RecentChangeEventMapperImpl.class);
         bind(EventOpenSearchClient.class).to(EventOpenSearchClientImpl.class);
         bind(RecentChangeEventConsumer.class).to(RecentChangeEventConsumerImpl.class);
         bind(WikimediaKafkaConsumerRunner.class).to(WikimediaKafkaConsumerRunnerImpl.class);
